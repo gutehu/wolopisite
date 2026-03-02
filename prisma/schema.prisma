@@ -1,0 +1,112 @@
+// Schéma Wolopi — Connexion unique Mobile ↔ Site, données partagées par compte
+// https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// Compte utilisateur (web + mobile lié via mobileUserId)
+model User {
+  id            String       @id @default(cuid())
+  email         String       @unique
+  name          String?
+  passwordHash  String?      // pour connexion site (optionnel si compte créé via mobile)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  mobileUserId String?      @unique // Lien Wolopi Mobile (sync / transfert)
+  athletes      Athlete[]
+  linkCodes     LinkCode[]
+  apiTokens     ApiToken[]
+  webSessions   WebSession[]
+}
+
+// Session navigateur (connexion site) — distinct de Session = entraînement
+model WebSession {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([tokenHash])
+}
+
+// Athlète rattaché à un compte (1 compte = 1 ou N athlètes, ex. coach)
+model Athlete {
+  id             String    @id @default(cuid())
+  userId         String
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name           String
+  // Id côté Wolopi Mobile pour ce profil (optionnel)
+  mobileAthleteId String?   @unique
+  isDefault      Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  sessions       Session[]
+
+  @@unique([userId, isDefault]) // un seul isDefault true par user
+  @@index([userId])
+}
+
+// Session d'entraînement (Velocity / Mobilité / Sauts) — visible sur site et mobile
+model Session {
+  id           String   @id @default(cuid())
+  athleteId    String
+  athlete      Athlete  @relation(fields: [athleteId], references: [id], onDelete: Cascade)
+  type         String   // "velocity" | "mobility" | "jump" | "rula"
+  startedAt    DateTime
+  endedAt      DateTime?
+  repCount     Int?
+  rawPayload   String?  // JSON métriques envoyé par l'app mobile
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([athleteId])
+  @@index([athleteId, startedAt])
+}
+
+// Code de liaison court (mobile saisit ce code pour lier le compte)
+model LinkCode {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  code      String    @unique // ex. "AB12CD"
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([code])
+  @@index([userId])
+}
+
+// Données sync extensibles (dashboards, metadata, futurs types) — clé = kind
+model SyncData {
+  id        String   @id @default(cuid())
+  userId    String
+  athleteId String
+  kind      String   // "dashboards" | "metadata" | "mobility_tests" | ...
+  payload   String   // JSON
+  createdAt DateTime @default(now())
+
+  @@unique([userId, athleteId, kind])
+  @@index([userId, athleteId])
+}
+
+// Token API pour que l'app mobile envoie les sessions (transfert / sync)
+model ApiToken {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String?  // ex. "iPhone Jean", "Wolopi Mobile"
+  tokenHash String   @unique // hash du token (jamais stocker le token en clair)
+  lastUsedAt DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
