@@ -4,8 +4,13 @@ import {
   hashPassword,
   createWebSession,
   setSessionCookieHeader,
-  getSessionFromCookie,
 } from "@/lib/auth";
+import {
+  DEFAULT_BIOMETRICS_MALE,
+  DEFAULT_BIOMETRICS_FEMALE,
+  DEFAULT_ATHLETE_NAMES,
+  toAthleteBiometricFields,
+} from "@/lib/biometrics";
 
 export async function POST(request: Request) {
   try {
@@ -40,12 +45,24 @@ export async function POST(request: Request) {
       data: { email, name, passwordHash },
     });
 
-    const athlete = await prisma.athlete.create({
-      data: {
-        userId: user.id,
-        name: name || "Moi",
-        isDefault: true,
-      },
+    // Profil Homme (par défaut) et Profil Femme avec mesures biométriques classiques
+    const maleFields = toAthleteBiometricFields(DEFAULT_BIOMETRICS_MALE);
+    const femaleFields = toAthleteBiometricFields(DEFAULT_BIOMETRICS_FEMALE);
+    await prisma.athlete.createMany({
+      data: [
+        {
+          userId: user.id,
+          name: DEFAULT_ATHLETE_NAMES.male,
+          isDefault: true,
+          ...maleFields,
+        },
+        {
+          userId: user.id,
+          name: DEFAULT_ATHLETE_NAMES.female,
+          isDefault: false,
+          ...femaleFields,
+        },
+      ],
     });
 
     const { token } = await createWebSession(user.id);
@@ -57,6 +74,15 @@ export async function POST(request: Request) {
     return res;
   } catch (e) {
     console.error("Signup failed:", e);
-    return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
+    const msg =
+      e instanceof Error && (
+        e.message.includes("DATABASE_URL") ||
+        e.message.includes("connect") ||
+        e.message.includes("ECONNREFUSED") ||
+        (e as { code?: string }).code === "P1001"
+      )
+        ? "Connexion à la base de données impossible. Vérifiez DATABASE_URL dans .env (ou les variables Vercel)."
+        : "Erreur serveur";
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }

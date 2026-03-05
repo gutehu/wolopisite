@@ -2,8 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ========== WOLOPI DESIGN SYSTEM — Dark Sport / Neon ========== */
+/* ========== WOLOPI DESIGN SYSTEM — Thème clair (défaut) / Sombre (économiseur) ========== */
 :root {
+  --background: #ffffff;
+  --foreground: #0a0a0b;
+  --muted: #a1a1aa;
+  --muted-foreground: #71717a;
+  --border: #e4e4e7;
+  --card: #fafafa;
+  --card-foreground: #0a0a0b;
+  --primary: #00a884;
+  --primary-foreground: #ffffff;
+  --secondary: #0891b2;
+  --accent: #e11d48;
+  --accent-2: #8b5cf6;
+  --destructive: #ef4444;
+}
+
+.dark {
   --background: #0a0a0b;
   --foreground: #fafafa;
   --muted: #71717a;
@@ -27,6 +43,89 @@
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
+}
+
+/* Fond d'étoiles Hero : dérive légère pour animer le fond derrière l'image homme/femme */
+@keyframes hero-stars-drift {
+  0%, 100% { background-position: 0 0; }
+  50% { background-position: 24px 32px; }
+}
+
+/* Quadrillage de fond dynamique (Hero) — mouvement aléatoire infini + respiration des carrés */
+@keyframes grid-drift {
+  0%    { background-position: 0 0;       background-size: 64px 64px; }
+  8%    { background-position: 96px 32px;  background-size: 72px 72px; }
+  16%   { background-position: 64px 128px; background-size: 58px 58px; }
+  24%   { background-position: 160px 64px; background-size: 78px 78px; }
+  32%   { background-position: 128px 160px; background-size: 62px 62px; }
+  40%   { background-position: 32px 96px;  background-size: 70px 70px; }
+  48%   { background-position: 192px 32px; background-size: 56px 56px; }
+  56%   { background-position: 64px 192px; background-size: 76px 76px; }
+  64%   { background-position: 224px 128px; background-size: 60px 60px; }
+  72%   { background-position: 96px 224px; background-size: 68px 68px; }
+  80%   { background-position: 160px 160px; background-size: 74px 74px; }
+  88%   { background-position: 32px 64px;  background-size: 58px 58px; }
+  96%   { background-position: 128px 0;    background-size: 66px 66px; }
+  100%  { background-position: 0 0;       background-size: 64px 64px; }
+}
+
+/* Deuxième couche : décalée pour que les lignes ne restent pas droites (moiré) */
+@keyframes grid-drift-2 {
+  0%    { background-position: 32px 64px;  background-size: 58px 58px; }
+  12%   { background-position: 128px 0;    background-size: 76px 76px; }
+  25%   { background-position: 64px 160px; background-size: 62px 62px; }
+  38%   { background-position: 192px 96px; background-size: 70px 70px; }
+  50%   { background-position: 96px 224px; background-size: 56px 56px; }
+  62%   { background-position: 160px 32px; background-size: 74px 74px; }
+  75%   { background-position: 0 128px;     background-size: 68px 68px; }
+  88%   { background-position: 224px 64px; background-size: 72px 72px; }
+  100%  { background-position: 32px 64px;  background-size: 58px 58px; }
+}
+
+/* Troisième couche : rotation pour que les lignes bougent et se déforment pendant le mouvement */
+@keyframes grid-drift-tilt {
+  0%    { background-position: 64px 0; transform: rotate(0deg); background-size: 66px 66px; }
+  20%   { background-position: 96px 96px; transform: rotate(2deg); background-size: 72px 72px; }
+  40%   { background-position: 32px 160px; transform: rotate(-1.5deg); background-size: 58px 58px; }
+  60%   { background-position: 160px 64px; transform: rotate(2.5deg); background-size: 74px 74px; }
+  80%   { background-position: 128px 192px; transform: rotate(-0.5deg); background-size: 62px 62px; }
+  100%  { background-position: 64px 0; transform: rotate(0deg); background-size: 66px 66px; }
+}
+
+/* Même mouvement que grid-drift, utilisé avec des durées très longues (bords très calmes) */
+@keyframes grid-drift-slow {
+  0%    { background-position: 0 0;       background-size: 64px 64px; }
+  8%    { background-position: 96px 32px;  background-size: 72px 72px; }
+  16%   { background-position: 64px 128px; background-size: 58px 58px; }
+  24%   { background-position: 160px 64px; background-size: 78px 78px; }
+  32%   { background-position: 128px 160px; background-size: 62px 62px; }
+  40%   { background-position: 32px 96px;  background-size: 70px 70px; }
+  48%   { background-position: 192px 32px; background-size: 56px 56px; }
+  56%   { background-position: 64px 192px; background-size: 76px 76px; }
+  64%   { background-position: 224px 128px; background-size: 60px 60px; }
+  72%   { background-position: 96px 224px; background-size: 68px 68px; }
+  80%   { background-position: 160px 160px; background-size: 74px 74px; }
+  88%   { background-position: 32px 64px;  background-size: 58px 58px; }
+  96%   { background-position: 128px 0;    background-size: 66px 66px; }
+  100%  { background-position: 0 0;       background-size: 64px 64px; }
+}
+
+/* Figures (homme/femme) : dérive très légère, ne modifie pas la taille — points denses stables */
+@keyframes grid-drift-figures {
+  0%   { background-position: 0 0; }
+  25%  { background-position: 4px 8px; }
+  50%  { background-position: 8px 4px; }
+  75%  { background-position: 4px 4px; }
+  100% { background-position: 0 0; }
+}
+
+/* Rond : les points du quadrillage forment un cercle pendant 30s, puis l’animation reprend son cours (cycle 90s) */
+@keyframes hero-circle-phase {
+  0%      { opacity: 0; }
+  5.5%    { opacity: 1; }
+  38.8%   { opacity: 1; }
+  43.3%   { opacity: 0; }
+  100%    { opacity: 0; }
 }
 
 body {

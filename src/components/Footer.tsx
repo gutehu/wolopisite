@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { Mail, MessageCircle, Twitter, Instagram, Linkedin } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-const legalLinks = [
-  { href: "/mentions-legales", label: "Mentions légales" },
-  { href: "/politique-confidentialite", label: "Politique de confidentialité" },
-  { href: "/cgu", label: "CGU" },
+const legalLinkKeys = [
+  { href: "/mentions-legales", key: "footer_legal_mentions" },
+  { href: "/politique-confidentialite", key: "footer_privacy" },
+  { href: "/cgu", key: "footer_terms" },
 ];
 
 const socialLinks = [
@@ -16,6 +17,7 @@ const socialLinks = [
 ];
 
 export function Footer() {
+  const { t } = useLanguage();
   return (
     <footer className="border-t border-border bg-card/50 px-4 py-12 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
@@ -25,23 +27,23 @@ export function Footer() {
               Wolopi
             </Link>
             <p className="mt-2 max-w-sm text-sm text-muted-foreground">
-              Biomécanique par IA — Vélocité, mobilité, profils force-vitesse.
+              {t("footer_tagline")}
             </p>
           </div>
 
           <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-10">
             <div>
               <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                Légal
+                {t("footer_legal")}
               </p>
               <ul className="mt-2 flex flex-wrap gap-4">
-                {legalLinks.map((link) => (
+                {legalLinkKeys.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
                       className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                     >
-                      {link.label}
+                      {t(link.key)}
                     </Link>
                   </li>
                 ))}
@@ -49,7 +51,7 @@ export function Footer() {
             </div>
             <div>
               <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                Contact
+                {t("footer_contact")}
               </p>
               <ul className="mt-2 flex flex-wrap gap-4">
                 <li>
@@ -67,14 +69,14 @@ export function Footer() {
                     className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
                   >
                     <MessageCircle size={14} />
-                    Support
+                    {t("footer_support")}
                   </a>
                 </li>
               </ul>
             </div>
             <div>
               <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                Réseaux
+                {t("footer_networks")}
               </p>
               <ul className="mt-2 flex gap-4">
                 {socialLinks.map(({ href, icon: Icon, label }) => (
@@ -94,7 +96,7 @@ export function Footer() {
         </div>
 
         <div className="mt-10 border-t border-border pt-8 text-center text-sm text-muted-foreground">
-          © {new Date().getFullYear()} Wolopi. Tous droits réservés.
+          © {new Date().getFullYear()} Wolopi. {t("footer_copyright")}
         </div>
       </div>
     </footer>

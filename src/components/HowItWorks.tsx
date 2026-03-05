@@ -2,29 +2,22 @@
 
 import { motion } from "framer-motion";
 import { Video, BarChart3, TrendingUp } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-const steps = [
-  {
-    number: "01",
-    title: "Filmez",
-    description: "Enregistrez vos mouvements avec la caméra de votre smartphone. L'IA détecte automatiquement les repères et les phases clés.",
-    icon: Video,
-  },
-  {
-    number: "02",
-    title: "Analysez",
-    description: "Obtenez des métriques en temps réel : vélocité, angles, hauteur de saut, profils force-vitesse. Visualisez vos courbes et historiques.",
-    icon: BarChart3,
-  },
-  {
-    number: "03",
-    title: "Progressez",
-    description: "Utilisez les données pour ajuster vos charges, votre volume et votre récupération. Objectif : progression mesurée et durable.",
-    icon: TrendingUp,
-  },
+const stepConfig = [
+  { number: "01", key: "how1", icon: Video },
+  { number: "02", key: "how2", icon: BarChart3 },
+  { number: "03", key: "how3", icon: TrendingUp },
 ];
 
 export function HowItWorks() {
+  const { t } = useLanguage();
+  const steps = stepConfig.map(({ number, key, icon }) => ({
+    number,
+    title: t(`${key}_title`),
+    description: t(`${key}_desc`),
+    icon,
+  }));
   return (
     <section id="how-it-works" className="relative px-4 py-20 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
@@ -35,10 +28,10 @@ export function HowItWorks() {
           className="mb-14 text-center"
         >
           <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Comment ça marche
+            {t("how_heading")}
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-            Trois étapes simples pour transformer votre entraînement en données actionnables.
+            {t("how_subtitle")}
           </p>
         </motion.div>
 

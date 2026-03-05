@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { User, Link2, LogOut, ArrowLeft, Loader2 } from "lucide-react";
+import { User, Link2, LogOut, ArrowLeft, Loader2, Upload } from "lucide-react";
 
 type UserSession = { id: string; email: string; name: string | null } | null;
 
@@ -64,13 +64,22 @@ export default function ComptePage() {
   return (
     <div className="min-h-screen bg-background px-4 py-12">
       <div className="mx-auto max-w-md">
-        <Link
-          href="/"
-          className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary"
-        >
-          <ArrowLeft size={16} />
-          Accueil
-        </Link>
+        <div className="mb-8 flex flex-wrap items-center gap-4">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary"
+          >
+            <ArrowLeft size={16} />
+            Accueil
+          </Link>
+          <Link
+            href="/dashboard/import"
+            className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
+          >
+            <Upload size={16} />
+            Importer des données
+          </Link>
+        </div>
 
         <div className="rounded-2xl border border-border bg-card/80 p-6 backdrop-blur">
           <div className="flex items-center gap-3">

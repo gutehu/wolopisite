@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BarChart3, ArrowLeft } from "lucide-react";
+import { BarChart3, ArrowLeft, Upload, BarChart2 } from "lucide-react";
 
 export default function DashboardPage() {
   return (
@@ -12,7 +12,21 @@ export default function DashboardPage() {
         <p className="mt-2 text-muted-foreground">
           Analysez vos données, courbes et historiques. Réservé aux utilisateurs connectés.
         </p>
-        <div className="mt-8 rounded-lg border border-secondary/30 bg-secondary/5 p-4 text-sm text-secondary">
+        <Link
+          href="/dashboard/import"
+          className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-primary/40 bg-primary/10 px-4 py-3 font-medium text-primary transition-colors hover:bg-primary/20"
+        >
+          <Upload size={20} />
+          Importer des données (.svf / .json)
+        </Link>
+        <Link
+          href="/dashboard/sessions"
+          className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-secondary/40 bg-secondary/10 px-4 py-3 font-medium text-secondary transition-colors hover:bg-secondary/20"
+        >
+          <BarChart2 size={20} />
+          Affichage dashboard (sessions enregistrées)
+        </Link>
+        <div className="mt-6 rounded-lg border border-secondary/30 bg-secondary/5 p-4 text-sm text-secondary">
           <strong>Phase 2</strong> — Ce portail sera alimenté par les données enregistrées dans l&apos;application mobile (Recharts, graphiques, export).
         </div>
         <Link

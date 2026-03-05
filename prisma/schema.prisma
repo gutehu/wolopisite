@@ -38,17 +38,26 @@ model WebSession {
 }
 
 // Athlète rattaché à un compte (1 compte = 1 ou N athlètes, ex. coach)
+// Mesures biométriques classiques : utilisées pour les tests et les calculs (VBT, mobilité, etc.)
 model Athlete {
-  id             String    @id @default(cuid())
-  userId         String
-  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  name           String
-  // Id côté Wolopi Mobile pour ce profil (optionnel)
-  mobileAthleteId String?   @unique
-  isDefault      Boolean   @default(false)
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  sessions       Session[]
+  id               String    @id @default(cuid())
+  userId           String
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name             String
+  mobileAthleteId  String?   @unique // Id côté Wolopi Mobile pour ce profil (optionnel)
+  isDefault        Boolean   @default(false)
+  // Biométrie (optionnel, profils type Homme/Femme en défaut)
+  gender           String?   // "male" | "female"
+  dateOfBirth      DateTime? // pour âge et normes
+  heightCm         Float?    // taille (cm)
+  weightKg         Float?    // masse (kg)
+  armSpanCm        Float?   // envergure (cm)
+  sittingHeightCm  Float?   // taille assis (cm)
+  bodyFatPercent   Float?   // masse grasse (%)
+  restingHeartRate Int?     // FC repos (bpm)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  sessions         Session[]
 
   @@unique([userId, isDefault]) // un seul isDefault true par user
   @@index([userId])
