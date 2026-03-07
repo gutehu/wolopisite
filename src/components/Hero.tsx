@@ -26,12 +26,12 @@ export function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex min-h-screen min-h-[100dvh] flex-col overflow-hidden px-4 pt-28 pb-12 sm:px-6 sm:pt-36 lg:flex-row lg:items-center lg:justify-between lg:gap-6 lg:px-10 xl:gap-10 xl:px-14"
+      className="relative grid min-h-screen min-h-[100dvh] grid-cols-1 overflow-hidden px-4 pt-28 pb-12 sm:px-6 sm:pt-36 lg:grid-cols-[1fr_auto_1fr] lg:items-center lg:gap-6 lg:px-10 xl:gap-10 xl:px-14"
       style={{ background: "#0c0c0d" }}
     >
-      {/* Fond Biomécanique Tech : constellation en arrière-plan (femme gauche, homme droite) */}
+      {/* Quadrillage / constellation : toujours derrière texte et images, toujours visible */}
       <div
-        className="hero-fond-style-effect pointer-events-none absolute inset-y-0 left-1/2 z-0 w-screen -translate-x-1/2 overflow-hidden opacity-60"
+        className="hero-fond-style-effect pointer-events-none absolute inset-0 z-[1] w-full overflow-hidden"
         data-hero-fond-effect
         aria-hidden
       >
@@ -41,7 +41,7 @@ export function Hero() {
       {/* Colonne gauche : titre, sous-titre, CTA principal, labels flottants */}
       <motion.div
         style={{ y: contentY, opacity: contentOpacity }}
-        className="relative z-10 flex flex-1 flex-col items-center text-center lg:max-w-md lg:items-start lg:text-left xl:max-w-lg"
+        className="relative z-[10] flex flex-1 flex-col items-center text-center lg:max-w-md lg:items-start lg:text-left xl:max-w-lg"
       >
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
@@ -106,7 +106,7 @@ export function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.4 }}
-        className="relative z-10 flex shrink-0 items-center justify-center py-8 lg:py-0"
+        className="relative z-[10] flex shrink-0 items-center justify-center py-8 lg:py-0"
       >
         <div
           className="overflow-hidden rounded-2xl border border-zinc-600/80 bg-zinc-800/90 p-2 shadow-2xl"
@@ -125,7 +125,7 @@ export function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.5 }}
-        className="relative z-10 flex flex-1 flex-col gap-4 lg:max-w-xs xl:max-w-sm"
+        className="relative z-[10] flex flex-1 flex-col gap-4 lg:max-w-xs xl:max-w-sm"
       >
         <Link
           href="/#features"
@@ -162,7 +162,7 @@ export function Hero() {
 
       <a
         href="#features"
-        className="absolute bottom-4 left-1/2 z-10 -translate-x-1/2 rounded-full p-2 text-zinc-500 transition-colors hover:text-[#00d4aa]"
+        className="absolute bottom-4 left-1/2 z-[10] -translate-x-1/2 rounded-full p-2 text-zinc-500 transition-colors hover:text-[#00d4aa]"
         aria-label="Scroll to content"
       >
         <motion.div
